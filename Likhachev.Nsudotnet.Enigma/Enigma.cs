@@ -31,9 +31,29 @@ namespace Likhachev.Nsudotnet.Enigma
             }
         }
 
+        private static void SaveKey(string inputFilename, byte[] key, byte[] iv)
+        {
+            var keyFilename = Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".key.txt");
+            Console.WriteLine(keyFilename);
+            using (var writer = new StreamWriter(keyFilename))
+            {
+                writer.WriteLine(Convert.ToBase64String(key));
+                writer.WriteLine(Convert.ToBase64String(iv));
+            }
+        }
+
+        private static void LoadKey(string keyFilename, SymmetricAlgorithm algo)
+        {
+            using (var reader = new StreamReader(keyFilename))
+            {
+                algo.Key = Convert.FromBase64String(reader.ReadLine());
+                algo.IV = Convert.FromBase64String(reader.ReadLine());
+            }
+        }
+
         private static void DoCode(string inputFilename, string outputFilename, ICryptoTransform transform)
         {
-            using (FileStream input = File.OpenRead(inputFilename), output = File.OpenWrite(outputFilename))
+            using (FileStream input = File.OpenRead(inputFilename), output = File.Open(outputFilename, FileMode.Create))
             {
                 using (var cs = new CryptoStream(output, transform, CryptoStreamMode.Write))
                 {
@@ -48,7 +68,7 @@ namespace Likhachev.Nsudotnet.Enigma
             {
                 var transform = algo.CreateEncryptor();
                 DoCode(inputFilename, outputFilename, transform);
-                // TODO: save key and initial vector
+                SaveKey(inputFilename, algo.Key, algo.IV);
             }
         }
 
@@ -56,7 +76,7 @@ namespace Likhachev.Nsudotnet.Enigma
         {
             using (var algo = GetAlgorithm(algorithmType))
             {
-                // TODO: load key and initial vector
+                LoadKey(keyFilename, algo);
                 var transform = algo.CreateDecryptor();
                 DoCode(inputFilename, outputFilename, transform);
             }
