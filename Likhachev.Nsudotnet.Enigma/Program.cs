@@ -4,6 +4,7 @@
     {
         private static void Main(string[] args)
         {
+            EnigmaCommandLineInterface.Run(args);
         }
     }
 }

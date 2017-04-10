@@ -34,7 +34,6 @@ namespace Likhachev.Nsudotnet.Enigma
         private static void SaveKey(string inputFilename, byte[] key, byte[] iv)
         {
             var keyFilename = Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".key.txt");
-            Console.WriteLine(keyFilename);
             using (var writer = new StreamWriter(keyFilename))
             {
                 writer.WriteLine(Convert.ToBase64String(key));
