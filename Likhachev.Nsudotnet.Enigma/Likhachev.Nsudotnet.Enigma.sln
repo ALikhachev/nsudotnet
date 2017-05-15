@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likhachev.Nsudotnet.Enigma", "Likhachev.Nsudotnet.Enigma.csproj", "{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likhachev.Nsudotnet.Enigma", "Likhachev.Nsudotnet.Enigma\Likhachev.Nsudotnet.Enigma.csproj", "{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likhachev.Nsudotnet.EnigmaGUI", "Likhachev.Nsudotnet.EnigmaGUI\Likhachev.Nsudotnet.EnigmaGUI.csproj", "{41EF6205-D956-477B-ADFD-944E79FAB486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41EF6205-D956-477B-ADFD-944E79FAB486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41EF6205-D956-477B-ADFD-944E79FAB486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41EF6205-D956-477B-ADFD-944E79FAB486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41EF6205-D956-477B-ADFD-944E79FAB486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

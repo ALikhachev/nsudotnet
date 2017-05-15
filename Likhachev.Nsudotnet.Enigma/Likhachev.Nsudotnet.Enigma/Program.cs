@@ -2,7 +2,7 @@
 
 namespace Likhachev.Nsudotnet.Enigma
 {
-    class EnigmaCommandLineInterface
+    internal class Program
     {
         private const int EncryptArgumentsCount = 4;
         private const int DecryptArgumentsCount = 5;
@@ -13,7 +13,7 @@ namespace Likhachev.Nsudotnet.Enigma
         private const int KeyFilenamePosition = 3;
         private const int DecryptOutputFilenamePosition = 4;
 
-        public static void Run(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
