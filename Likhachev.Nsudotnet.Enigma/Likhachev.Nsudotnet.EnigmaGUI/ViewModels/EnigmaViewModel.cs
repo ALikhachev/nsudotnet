@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
@@ -19,6 +20,8 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
         private string _keyFilename;
         private Algorithm _algorithm = Enigma.Algorithm.AES;
         private bool _encrypt = true;
+        private int _currentProgress;
+        private bool _isActive = false;
 
         public List<Algorithm> Algorithm => Enum.GetValues(typeof(Algorithm)).OfType<Algorithm>().ToList();
 
@@ -29,6 +32,31 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
             {
                 _algorithm = value;
                 NotifyOfPropertyChange(() => SelectedAlgorithm);
+            }
+        }
+
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                _isActive = value;
+                NotifyOfPropertyChange(() => IsActive);
+                NotifyOfPropertyChange(() => CanGo);
+            }
+        }
+
+        public int CurrentProgress
+        {
+            get => _currentProgress;
+            set
+            {
+                if (_currentProgress == value)
+                {
+                    return;
+                }
+                _currentProgress = value;
+                NotifyOfPropertyChange(() => CurrentProgress);
             }
         }
 
@@ -105,6 +133,7 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
                 NotifyOfPropertyChange(() => CanGo);
             }
         }
+
         public bool IsDecryptMode
         {
             get => !_encrypt;
@@ -118,26 +147,42 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
         }
 
         public bool CanGo => File.Exists(SourceFilename) && !string.IsNullOrEmpty(OutputFilename)
-                             && _encrypt ? !string.IsNullOrEmpty(KeyFilename) : File.Exists(KeyFilename);
+                             && (_encrypt
+                                 ? !string.IsNullOrEmpty(KeyFilename)
+                                 : File.Exists(KeyFilename))
+                             && !IsActive;
 
         public void Go()
         {
-            try
+            ThreadPool.QueueUserWorkItem(delegate
             {
-                if (_encrypt)
+                try
                 {
-                    Encrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename);
+                    IsActive = true;
+                    if (_encrypt)
+                    {
+                        Encrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
+                            (progress) =>
+                            {
+                                CurrentProgress = progress;
+                            });
+                    }
+                    else
+                    {
+                        Decrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
+                            (progress) => { CurrentProgress = progress; });
+                    }
+                    MessageBox.Show("File encoding done.", "Success!", MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                    IsActive = false;
                 }
-                else
+                catch (Exception ex)
                 {
-                    Decrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename);
+                    MessageBox.Show($"Error during encoding: {ex.Message}", "Fail", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    IsActive = false;
                 }
-                MessageBox.Show("File encoding done.", "Success!", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during encoding: {ex.Message}", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            });
         }
     }
 }

@@ -56,23 +56,31 @@ namespace Likhachev.Nsudotnet.Enigma
             }
         }
 
-        private static void DoCode(string inputFilename, string outputFilename, ICryptoTransform transform)
+        private static void DoCode(string inputFilename, string outputFilename, ICryptoTransform transform, Action<int> updateProgress)
         {
             using (FileStream input = File.OpenRead(inputFilename), output = File.Open(outputFilename, FileMode.Create))
             {
                 using (var cs = new CryptoStream(output, transform, CryptoStreamMode.Write))
                 {
-                    input.CopyTo(cs);
+                    var buf = new byte[10 * 1024];
+                    var totalRead = 0L;
+                    var read = 0;
+                    while ((read = input.Read(buf, 0, buf.Length)) != 0)
+                    {
+                        totalRead += read;
+                        cs.Write(buf, 0, read);
+                        updateProgress((int) ((10000 * totalRead) / input.Length));
+                    }
                 }
             }
         }
 
-        public static void Encrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename)
+        public static void Encrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename, Action<int> updateProgress)
         {
             using (var algo = GetAlgorithm(algorithmType))
             {
                 var transform = algo.CreateEncryptor();
-                DoCode(inputFilename, outputFilename, transform);
+                DoCode(inputFilename, outputFilename, transform, updateProgress);
                 if (string.IsNullOrEmpty(keyFilename))
                 {
                     keyFilename = GetDefaultKeyFilename(inputFilename);
@@ -99,13 +107,13 @@ namespace Likhachev.Nsudotnet.Enigma
             return Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".bin");
         }
 
-        public static void Decrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename)
+        public static void Decrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename, Action<int> updateProgress)
         {
             using (var algo = GetAlgorithm(algorithmType))
             {
                 LoadKey(keyFilename, algo);
                 var transform = algo.CreateDecryptor();
-                DoCode(inputFilename, outputFilename, transform);
+                DoCode(inputFilename, outputFilename, transform, updateProgress);
             }
         }
     }

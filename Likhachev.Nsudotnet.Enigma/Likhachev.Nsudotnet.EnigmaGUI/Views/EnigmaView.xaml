@@ -36,6 +36,6 @@
         <RadioButton x:Name="IsEncryptMode" Content="Encrypt" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
         <RadioButton x:Name="IsDecryptMode" Content="Decrypt" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
         <Button x:Name="Go" Content="Go!" Height="23" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75"/>
-        <ProgressBar x:Name="ProgressBar" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"></ProgressBar>
+        <ProgressBar x:Name="CurrentProgress" Minimum="0" Maximum="10000" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"></ProgressBar>
     </Grid>
 </Window>

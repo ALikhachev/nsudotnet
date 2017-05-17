@@ -32,7 +32,8 @@ namespace Likhachev.Nsudotnet.Enigma
                             {
                                 Console.WriteLine("Unknown encryption algorithm: {0}", args[AlgorithmPosition]);
                             }
-                            Enigma.Encrypt(args[InputFilenamePosition], args[EncryptOutputFilenamePosition], algorithm, null);
+                            Enigma.Encrypt(args[InputFilenamePosition], args[EncryptOutputFilenamePosition], algorithm, null,
+                                progress => { });
                         }
                         break;
                     case "decrypt":
@@ -50,7 +51,7 @@ namespace Likhachev.Nsudotnet.Enigma
                                 Console.WriteLine("Unknown encryption algorithm: {0}", args[AlgorithmPosition]);
                             }
                             Enigma.Decrypt(args[InputFilenamePosition], args[DecryptOutputFilenamePosition], algorithm,
-                                args[KeyFilenamePosition]);
+                                args[KeyFilenamePosition], progress => { });
                         }
                         break;
                     default:
