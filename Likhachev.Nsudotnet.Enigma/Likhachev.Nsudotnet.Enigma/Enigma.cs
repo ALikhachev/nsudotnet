@@ -6,9 +6,9 @@ namespace Likhachev.Nsudotnet.Enigma
 {
     public enum Algorithm
     {
-        Aes,
-        Des,
-        Rc2,
+        AES,
+        DES,
+        RC2,
         Rijndael
     }
 
@@ -18,11 +18,11 @@ namespace Likhachev.Nsudotnet.Enigma
         {
             switch (algorithmType)
             {
-                case Algorithm.Aes:
+                case Algorithm.AES:
                     return Aes.Create();
-                case Algorithm.Des:
+                case Algorithm.DES:
                     return DES.Create();
-                case Algorithm.Rc2:
+                case Algorithm.RC2:
                     return RC2.Create();
                 case Algorithm.Rijndael:
                     return Rijndael.Create();
@@ -31,9 +31,8 @@ namespace Likhachev.Nsudotnet.Enigma
             }
         }
 
-        private static void SaveKey(string inputFilename, byte[] key, byte[] iv)
+        private static void SaveKey(string keyFilename, byte[] key, byte[] iv)
         {
-            var keyFilename = Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".key.txt");
             using (var writer = new StreamWriter(keyFilename))
             {
                 writer.WriteLine(Convert.ToBase64String(key));
@@ -43,10 +42,17 @@ namespace Likhachev.Nsudotnet.Enigma
 
         private static void LoadKey(string keyFilename, SymmetricAlgorithm algo)
         {
-            using (var reader = new StreamReader(keyFilename))
+            try
             {
-                algo.Key = Convert.FromBase64String(reader.ReadLine());
-                algo.IV = Convert.FromBase64String(reader.ReadLine());
+                using (var reader = new StreamReader(keyFilename))
+                {
+                    algo.Key = Convert.FromBase64String(reader.ReadLine());
+                    algo.IV = Convert.FromBase64String(reader.ReadLine());
+                }
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(keyFilename + " is not a key file!");
             }
         }
 
@@ -61,14 +67,36 @@ namespace Likhachev.Nsudotnet.Enigma
             }
         }
 
-        public static void Encrypt(string inputFilename, string outputFilename, Algorithm algorithmType)
+        public static void Encrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename)
         {
             using (var algo = GetAlgorithm(algorithmType))
             {
                 var transform = algo.CreateEncryptor();
                 DoCode(inputFilename, outputFilename, transform);
-                SaveKey(inputFilename, algo.Key, algo.IV);
+                if (string.IsNullOrEmpty(keyFilename))
+                {
+                    keyFilename = GetDefaultKeyFilename(inputFilename);
+                }
+                SaveKey(keyFilename, algo.Key, algo.IV);
             }
+        }
+
+        public static string GetDefaultKeyFilename(string inputFilename)
+        {
+            if (string.IsNullOrEmpty(inputFilename))
+            {
+                return null;
+            }
+            return Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".key");
+        }
+
+        public static string GetDefaultCryptedFilename(string inputFilename)
+        {
+            if (string.IsNullOrEmpty(inputFilename))
+            {
+                return null;
+            }
+            return Path.Combine(Path.GetDirectoryName(inputFilename), path2: Path.GetFileNameWithoutExtension(inputFilename) + ".bin");
         }
 
         public static void Decrypt(string inputFilename, string outputFilename, Algorithm algorithmType, string keyFilename)

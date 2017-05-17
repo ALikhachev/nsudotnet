@@ -72,7 +72,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnigmaView.xaml.cs">
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ViewModels\EnigmaViewModel.cs" />
+    <Compile Include="Views\EnigmaView.xaml.cs">
       <DependentUpon>EnigmaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -102,10 +104,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="EnigmaView.xaml">
+    <Page Include="Views\EnigmaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Likhachev.Nsudotnet.Enigma\Likhachev.Nsudotnet.Enigma.csproj">
+      <Project>{F1BAD32A-1B07-489E-9CDF-41123D0CBBA0}</Project>
+      <Name>Likhachev.Nsudotnet.Enigma</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
