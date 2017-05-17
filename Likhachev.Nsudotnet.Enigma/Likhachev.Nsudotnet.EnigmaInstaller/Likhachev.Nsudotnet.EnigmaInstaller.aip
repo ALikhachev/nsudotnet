@@ -169,8 +169,8 @@
     <ROW Registry="Shell" Root="0" Key="*\Shell" Name="+" Component_="Shell"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
     <ROW Registry="_" Root="0" Key="*" Name="+" Component_="_"/>
-    <ROW Registry="__1" Root="0" Key="*\Shell\DecryptWithEnigma\Command" Value="[#Likhachev.Nsudotnet.EnigmaGUI.exe] d %1" Component_="__1"/>
-    <ROW Registry="__2" Root="0" Key="*\Shell\EncryptWithEnigma\Command" Value="[#Likhachev.Nsudotnet.EnigmaGUI.exe] e %1" Component_="__2"/>
+    <ROW Registry="__1" Root="0" Key="*\Shell\DecryptWithEnigma\Command" Value="[#Likhachev.Nsudotnet.EnigmaGUI.exe] d &quot;%1&quot;" Component_="__1"/>
+    <ROW Registry="__2" Root="0" Key="*\Shell\EncryptWithEnigma\Command" Value="[#Likhachev.Nsudotnet.EnigmaGUI.exe] e &quot;%1&quot;" Component_="__2"/>
     <ROW Registry="__3" Root="0" Key="*\Shell\DecryptWithEnigma" Value="Decrypt with Enigma" Component_="__3"/>
     <ROW Registry="__4" Root="0" Key="*\Shell\EncryptWithEnigma" Value="Encrypt with Enigma" Component_="__4"/>
   </COMPONENT>
