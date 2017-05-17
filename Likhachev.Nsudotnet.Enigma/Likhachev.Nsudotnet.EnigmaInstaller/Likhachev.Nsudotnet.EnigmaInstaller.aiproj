@@ -1,0 +1,32 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">All</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>06f2af3e-fa2e-4251-b00d-64d6888f7a6b</ProjectGuid>
+    <OutputType>msi</OutputType>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>Likhachev.Nsudotnet.EnigmaInstaller.aip</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <IsWindowsApplication>True</IsWindowsApplication>
+    <AssemblyName>Likhachev.Nsudotnet.EnigmaInstaller</AssemblyName>
+    <Name>Likhachev.Nsudotnet.EnigmaInstaller</Name>
+    <RootNamespace>Likhachev.Nsudotnet.EnigmaInstaller</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'DefaultBuild' " />
+  <ItemGroup>
+    <Compile Include="Likhachev.Nsudotnet.EnigmaInstaller.aip">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Likhachev.Nsudotnet.EnigmaGUI\Likhachev.Nsudotnet.EnigmaGUI.csproj">
+      <Name>Likhachev.Nsudotnet.EnigmaGUI</Name>
+      <Project>{41ef6205-d956-477b-adfd-944e79fab486}</Project>
+      <Private>True</Private>
+      <OutputsToImport>PrimaryOutput;References</OutputsToImport>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Caphyon\Advanced Installer\AdvInstExtTasks.Targets" />
+</Project>
