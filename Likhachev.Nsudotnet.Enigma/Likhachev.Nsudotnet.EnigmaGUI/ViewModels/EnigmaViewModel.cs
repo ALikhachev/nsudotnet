@@ -25,6 +25,19 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
 
         public List<Algorithm> Algorithm => Enum.GetValues(typeof(Algorithm)).OfType<Algorithm>().ToList();
 
+        public EnigmaViewModel()
+        {
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                _encrypt = args[1] == "e";
+            }
+            if (args.Length > 2)
+            {
+                SourceFilename = args[2];
+            }
+        }
+
         public Algorithm SelectedAlgorithm
         {
             get => _algorithm;
