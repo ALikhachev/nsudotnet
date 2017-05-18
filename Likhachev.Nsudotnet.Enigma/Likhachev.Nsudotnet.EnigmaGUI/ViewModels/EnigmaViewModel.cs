@@ -174,10 +174,7 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
                 if (_encrypt)
                 {
                     await Encrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
-                        (progress) =>
-                        {
-                            CurrentProgress = progress;
-                        });
+                        (progress) => { CurrentProgress = progress; });
                 }
                 else
                 {
