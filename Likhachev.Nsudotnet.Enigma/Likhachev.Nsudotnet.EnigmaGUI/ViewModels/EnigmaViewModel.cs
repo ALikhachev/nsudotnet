@@ -81,6 +81,7 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
                 _sourceFilename = value;
                 OutputFilename = IsEncryptMode ? GetDefaultCryptedFilename(value) : null;
                 KeyFilename = GetDefaultKeyFilename(value);
+                CurrentProgress = 0;
                 NotifyOfPropertyChange(() => SourceFilename);
                 NotifyOfPropertyChange(() => CanGo);
             }
