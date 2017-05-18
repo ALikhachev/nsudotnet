@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Likhachev.Nsudotnet.Enigma
 {
@@ -13,7 +14,13 @@ namespace Likhachev.Nsudotnet.Enigma
         private const int KeyFilenamePosition = 3;
         private const int DecryptOutputFilenamePosition = 4;
 
-        private static void Main(string[] args)
+        static void Main(string[] args)
+        {
+            var task = Task.Run(() => MainAsync(args));
+            task.Wait();
+        }
+
+        private static async void MainAsync(string[] args)
         {
             try
             {
@@ -32,7 +39,7 @@ namespace Likhachev.Nsudotnet.Enigma
                             {
                                 Console.WriteLine("Unknown encryption algorithm: {0}", args[AlgorithmPosition]);
                             }
-                            Enigma.Encrypt(args[InputFilenamePosition], args[EncryptOutputFilenamePosition], algorithm, null,
+                            await Enigma.Encrypt(args[InputFilenamePosition], args[EncryptOutputFilenamePosition], algorithm, null,
                                 progress => { });
                         }
                         break;
@@ -50,7 +57,7 @@ namespace Likhachev.Nsudotnet.Enigma
                             {
                                 Console.WriteLine("Unknown encryption algorithm: {0}", args[AlgorithmPosition]);
                             }
-                            Enigma.Decrypt(args[InputFilenamePosition], args[DecryptOutputFilenamePosition], algorithm,
+                            await Enigma.Decrypt(args[InputFilenamePosition], args[DecryptOutputFilenamePosition], algorithm,
                                 args[KeyFilenamePosition], progress => { });
                         }
                         break;

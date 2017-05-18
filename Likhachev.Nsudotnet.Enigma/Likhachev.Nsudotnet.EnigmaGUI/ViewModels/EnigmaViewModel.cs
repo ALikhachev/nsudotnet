@@ -165,37 +165,34 @@ namespace Likhachev.Nsudotnet.EnigmaGUI.ViewModels
                                  : File.Exists(KeyFilename))
                              && !IsActive;
 
-        public void Go()
+        public async void Go()
         {
-            ThreadPool.QueueUserWorkItem(delegate
+            try
             {
-                try
+                IsActive = true;
+                if (_encrypt)
                 {
-                    IsActive = true;
-                    if (_encrypt)
-                    {
-                        Encrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
-                            (progress) =>
-                            {
-                                CurrentProgress = progress;
-                            });
-                    }
-                    else
-                    {
-                        Decrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
-                            (progress) => { CurrentProgress = progress; });
-                    }
-                    MessageBox.Show("File encoding done.", "Success!", MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                    IsActive = false;
+                    await Encrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
+                        (progress) =>
+                        {
+                            CurrentProgress = progress;
+                        });
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Error during encoding: {ex.Message}", "Fail", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    IsActive = false;
+                    await Decrypt(SourceFilename, OutputFilename, _algorithm, KeyFilename,
+                        (progress) => { CurrentProgress = progress; });
                 }
-            });
+                MessageBox.Show("File encoding done.", "Success!", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                IsActive = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during encoding: {ex.Message}", "Fail", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                IsActive = false;
+            }
         }
     }
 }
